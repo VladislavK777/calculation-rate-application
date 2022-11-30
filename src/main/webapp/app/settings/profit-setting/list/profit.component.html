@@ -1,0 +1,42 @@
+<div>
+  <h2>
+    <span id="profit-heading" data-cy="profitHeading">Настройка доходности</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Обновить список</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="table-responsive" *ngIf="profits">
+    <table class="table table-striped" aria-describedby="profit-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span>Объем</span></th>
+          <th scope="col"><span>Значение</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody *ngIf="profits">
+        <tr *ngFor="let profit of profits">
+          <td>{{ profit.cargoVolume.value }}</td>
+          <td>{{ profit.value }}</td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['./', profit.id, 'edit']" queryParamsHandling="merge" class="btn btn-primary btn-sm">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Изменить</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,97 @@
+<div>
+  <h2>
+    <span id="return-exception-heading" data-cy="returnExceptionHeading">Возвратные исключения</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Обновить список</span>
+      </button>
+      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon>
+        <span>Добавить исключение</span>
+      </button>
+    </div>
+  </h2>
+
+  <div class="alert alert-danger" *ngIf="messageError != null" data-cy="returnExceptionHeading">
+    <strong>Ошибка! {{ messageError }}</strong>
+  </div>
+
+  <div class="table-responsive" *ngIf="returnExceptions">
+    <table class="table table-striped" aria-describedby="return-exception-heading">
+      <thead>
+      <tr>
+        <th scope="col"><span>Порядок</span></th>
+        <th scope="col"><span>Дороги</span></th>
+        <th scope="col"><span>Станции исключения</span></th>
+        <th scope="col"><span>Отделения исключения</span></th>
+        <th scope="col"><span>Объем вагона</span></th>
+        <th scope="col"><span>Класс груза</span></th>
+        <th scope="col"><span>Станция возврата</span></th>
+        <th scope="col"><span>Станция отправления</span></th>
+        <th scope="col"><span>Станция назначения</span></th>
+        <th scope="col"><span>Груз</span></th>
+        <th scope="col"><span>Тир рейса</span></th>
+        <th scope="col"><span>Растояние</span></th>
+        <th scope="col"><span>Время в пути</span></th>
+        <th scope="col"><span>Погрузка/Разгрузка</span></th>
+        <th scope="col"><span>Ставка</span></th>
+        <th scope="col"><span>Тариф</span></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody *ngIf="returnExceptions">
+      <tr *ngFor="let returnException of returnExceptions">
+        <td>{{ returnException.num }}</td>
+        <td>
+          <div *ngFor="let road of returnException.roads">
+            <span class="badge bg-info">{{ road.shortName }}</span>
+          </div>
+        </td>
+        <td>
+          <div *ngFor="let station of returnException.stations">
+            <span class="badge bg-info">{{ station.name }}</span>
+          </div>
+        </td>
+        <td>
+          <div *ngFor="let department of returnException.departments">
+            <span class="badge bg-info">{{ department.name }}</span>
+          </div>
+        </td>
+        <td>
+          <div *ngFor="let cargoVolume of returnException.cargoVolumes">
+            <span class="badge bg-info">{{ cargoVolume.value }}</span>
+          </div>
+        </td>
+        <td>
+          <div *ngFor="let cargoClass of returnException.cargoClasses">
+            <span class="badge bg-info">{{ cargoClass.value }}</span>
+          </div>
+        </td>
+        <td>{{ returnException.stationReturn?.name }}</td>
+        <td>{{ returnException.stationFrom?.name }}</td>
+        <td>{{ returnException.stationTo?.name }}</td>
+        <td>{{ returnException.cargo.name }}</td>
+        <td>{{ getCargoFlightType(returnException.cargoFlightType) }}</td>
+        <td>{{ returnException.distance }}</td>
+        <td>{{ returnException.travelTime }}</td>
+        <td>{{ returnException.loadUnload }}</td>
+        <td>{{ returnException.rate }}</td>
+        <td>{{ returnException.tariff }}</td>
+        <td class="text-end">
+          <div class="btn-group">
+            <button type="submit" [routerLink]="['./', returnException.id, 'edit']" queryParamsHandling="merge"
+                    class="btn btn-primary btn-sm">
+              <span class="d-none d-md-inline">Изменить</span>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm" (click)="delete(returnException)">
+              <span class="d-none d-md-inline">Удалить</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

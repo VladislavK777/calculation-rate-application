@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="myTurnoverDayLabel">Редактировать значение {{ turnoverDay.key == 'UNLOAD' ? 'Выгрузка' : 'Погрузка' }}</h2>
+
+      <div class="alert alert-danger" *ngIf="messageError != null" data-cy="turnoverDayError">
+        <strong>Ошибка! {{ messageError }}</strong>
+      </div>
+
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Значение</mat-label>
+          <input type="text"
+                 name="value"
+                 matInput
+                 autocomplete="off"
+                 formControlName="value">
+        </mat-form-field>
+      </div>
+
+      <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+        <fa-icon icon="save"></fa-icon>&nbsp;<span>Сохранить</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="previousState()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Отмена</span>
+      </button>
+
+    </form>
+  </div>
+</div>

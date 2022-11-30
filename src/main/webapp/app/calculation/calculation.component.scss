@@ -1,0 +1,94 @@
+/* ==========================================================================
+Calculate page styles
+========================================================================== */
+
+.hipster {
+  display: inline-block;
+  width: 347px;
+  height: 497px;
+  background: url('../../content/images/jhipster_family_member_0.svg') no-repeat center top;
+  background-size: contain;
+}
+
+.table-calculate {
+  border: 1px solid rgb(136, 136, 136);
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12px;
+}
+
+.table-header {
+  border-width: 0px 1px 1px 1px;
+  border-top-style: initial;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: initial;
+  border-top-color: initial;
+  border-right-color: rgb(136, 136, 136);
+  border-bottom-color: rgb(136, 136, 136);
+  border-left-color: initial;
+  border-image: initial;
+  padding: 3px;
+  min-width: 25px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: rgb(255, 255, 153);
+}
+
+.table-body {
+  border: 1px solid rgb(136, 136, 136);
+  padding: 3px;
+  min-width: 25px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.table-body-request-rout {
+  border: 1px solid rgb(136, 136, 136);
+  padding: 3px;
+  min-width: 25px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: #D6D6D6;
+  font-weight: bold;
+}
+
+.table-footer {
+  border-width: 1px 1px 0px 0px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: initial;
+  border-left-style: initial;
+  border-top-color: rgb(136, 136, 136);
+  border-right-color: rgb(136, 136, 136);
+  border-bottom-color: initial;
+  border-left-color: initial;
+  border-image: initial;
+  padding: 3px;
+  min-width: 25px;
+  height: 25px;
+  text-align: center;
+  vertical-align: middle;
+  background-color: rgb(204, 255, 204);
+}
+
+.example-form {
+  min-width: 150px;
+  width: 100%;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+/* wait autoprefixer update to allow simple generation of high pixel density media query */
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (-moz-min-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
+  .hipster {
+    background: url('../../content/images/jhipster_family_member_0.svg') no-repeat center top;
+    background-size: contain;
+  }
+}

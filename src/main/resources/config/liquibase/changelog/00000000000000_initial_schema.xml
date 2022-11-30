@@ -1,0 +1,722 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="00000000000000" author="jhipster">
+        <createSequence sequenceName="sequence_generator" startValue="1050" incrementBy="50"/>
+        <createSequence sequenceName="return_exception_setting_generator" startValue="1" incrementBy="1"/>
+        <createSequence sequenceName="begin_exception_setting_generator" startValue="1" incrementBy="1"/>
+    </changeSet>
+
+    <!--
+        JHipster core tables.
+        The initial schema has the '00000000000001' id, so that it is over-written if we re-generate it.
+    -->
+    <changeSet id="00000000000001" author="jhipster">
+        <createTable tableName="jhi_user">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="login" type="varchar(50)">
+                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
+            </column>
+            <column name="password_hash" type="varchar(60)"/>
+            <column name="first_name" type="varchar(50)"/>
+            <column name="last_name" type="varchar(50)"/>
+            <column name="email" type="varchar(191)">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
+            </column>
+            <column name="image_url" type="varchar(256)"/>
+            <column name="activated" type="boolean" valueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lang_key" type="varchar(10)"/>
+            <column name="activation_key" type="varchar(20)"/>
+            <column name="reset_key" type="varchar(20)"/>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="reset_date" type="timestamp">
+                <constraints nullable="true"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <createTable tableName="jhi_authority">
+            <column name="name" type="varchar(50)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="jhi_user_authority">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authority_name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, authority_name" tableName="jhi_user_authority"/>
+
+        <createTable tableName="jhi_persistent_token">
+            <column name="series" type="varchar(20)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint"/>
+            <column name="token_value" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_date" type="date"/>
+            <column name="ip_address" type="varchar(39)"/>
+            <column name="user_agent" type="varchar(255)"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="authority_name"
+                                 baseTableName="jhi_user_authority"
+                                 constraintName="fk_authority_name"
+                                 referencedColumnNames="name"
+                                 referencedTableName="jhi_authority"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="jhi_user_authority"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <addNotNullConstraint columnName="password_hash"
+                              columnDataType="varchar(60)"
+                              tableName="jhi_user"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="jhi_persistent_token"
+                                 constraintName="fk_user_persistent_token"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+        <loadData
+            file="config/liquibase/data/user.csv"
+            separator=";"
+            tableName="jhi_user"
+            usePreparedStatements="true">
+            <column name="id" type="numeric"/>
+            <column name="activated" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+        <dropDefaultValue tableName="jhi_user" columnName="created_date" columnDataType="${datetimeType}"/>
+        <loadData
+            file="config/liquibase/data/authority.csv"
+            separator=";"
+            tableName="jhi_authority"
+            usePreparedStatements="true">
+            <column name="name" type="string"/>
+        </loadData>
+        <loadData
+            file="config/liquibase/data/user_authority.csv"
+            separator=";"
+            tableName="jhi_user_authority"
+            usePreparedStatements="true">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000002" context="test">
+        <createTable tableName="jhi_date_time_wrapper">
+            <column name="id" type="BIGINT">
+                <constraints primaryKey="true" primaryKeyName="jhi_date_time_wrapperPK"/>
+            </column>
+            <column name="instant" type="timestamp"/>
+            <column name="local_date_time" type="timestamp"/>
+            <column name="offset_date_time" type="timestamp"/>
+            <column name="zoned_date_time" type="timestamp"/>
+            <column name="local_time" type="time"/>
+            <column name="offset_time" type="time"/>
+            <column name="local_date" type="date"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000003">
+        <createTable tableName="road">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="roadPK"/>
+            </column>
+            <column name="code" type="varchar(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="short_name" type="varchar(6)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="road" indexName="road_code" unique="true">
+            <column name="code"/>
+        </createIndex>
+
+        <loadData
+            file="config/liquibase/data/road.csv"
+            separator=";"
+            tableName="road"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000004">
+        <createTable tableName="department">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="departmentPK"/>
+            </column>
+            <column name="code" type="varchar(6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="road_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="road_id"
+                                 baseTableName="department"
+                                 constraintName="fk_department_road"
+                                 referencedColumnNames="id"
+                                 referencedTableName="road"/>
+
+        <createIndex tableName="department" indexName="department_code" unique="true">
+            <column name="code"/>
+        </createIndex>
+        <createIndex tableName="department" indexName="department_name">
+            <column name="name"/>
+        </createIndex>
+
+        <loadData
+            file="config/liquibase/data/department.csv"
+            separator=";"
+            tableName="department"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000005">
+        <createTable tableName="station">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="stationPK"/>
+            </column>
+            <column name="code" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="road_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="station"
+                                 constraintName="fk_station_department"
+                                 referencedColumnNames="id"
+                                 referencedTableName="department"/>
+
+        <addForeignKeyConstraint baseColumnNames="road_id"
+                                 baseTableName="station"
+                                 constraintName="fk_station_road"
+                                 referencedColumnNames="id"
+                                 referencedTableName="road"/>
+
+        <createIndex tableName="station" indexName="station_code" unique="true">
+            <column name="code"/>
+        </createIndex>
+        <createIndex tableName="station" indexName="station_name">
+            <column name="name"/>
+        </createIndex>
+
+        <loadData
+            file="config/liquibase/data/station.csv"
+            separator=";"
+            tableName="station"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000006">
+        <createTable tableName="cargo_volume">
+            <column name="value" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <loadData
+            file="config/liquibase/data/cargo_volume.csv"
+            separator=";"
+            tableName="cargo_volume"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000007">
+        <createTable tableName="cargo_class">
+            <column name="value" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <loadData
+            file="config/liquibase/data/cargo_class.csv"
+            separator=";"
+            tableName="cargo_class"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000008">
+        <createTable tableName="cargo">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="cargoPK"/>
+            </column>
+            <column name="code" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_class_value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_class_value"
+                                 baseTableName="cargo"
+                                 constraintName="fk_cargo_class"
+                                 referencedColumnNames="value"
+                                 referencedTableName="cargo_class"/>
+
+        <createIndex tableName="cargo" indexName="cargo_code" unique="true">
+            <column name="code"/>
+        </createIndex>
+        <createIndex tableName="cargo" indexName="cargo_name">
+            <column name="name"/>
+        </createIndex>
+
+        <loadData
+            file="config/liquibase/data/cargo.csv"
+            separator=";"
+            tableName="cargo"/>
+    </changeSet>
+
+    <!--return_exception_setting-->
+    <changeSet author="jhipster" id="0000000000009">
+        <createTable tableName="return_exception_setting">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="returnExceptionSettingPK"/>
+            </column>
+            <column name="num" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_return_id" type="bigint"/>
+            <column name="station_from_id" type="bigint"/>
+            <column name="station_to_id" type="bigint"/>
+            <column name="cargo_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_flight_type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="travel_time" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="load_unload" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tariff" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="distance" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="station_return_id"
+                                 baseTableName="return_exception_setting"
+                                 constraintName="fk_station_return_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+
+        <addForeignKeyConstraint baseColumnNames="station_from_id"
+                                 baseTableName="return_exception_setting"
+                                 constraintName="fk_station_from_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+
+        <addForeignKeyConstraint baseColumnNames="station_to_id"
+                                 baseTableName="return_exception_setting"
+                                 constraintName="fk_station_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_id"
+                                 baseTableName="return_exception_setting"
+                                 constraintName="fk_cargo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cargo"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000010">
+        <createTable tableName="return_exceptions_roads">
+            <column name="return_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="road_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="return_exception_setting_id, road_id" tableName="return_exceptions_roads"/>
+
+        <addForeignKeyConstraint baseColumnNames="return_exception_setting_id"
+                                 baseTableName="return_exceptions_roads"
+                                 constraintName="fk_return_exceptions_roads_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="return_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="road_id"
+                                 baseTableName="return_exceptions_roads"
+                                 constraintName="fk_return_exceptions_roads_2"
+                                 referencedColumnNames="id"
+                                 referencedTableName="road"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000011">
+        <createTable tableName="return_exceptions_stations">
+            <column name="return_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="return_exception_setting_id, station_id" tableName="return_exceptions_stations"/>
+
+        <addForeignKeyConstraint baseColumnNames="return_exception_setting_id"
+                                 baseTableName="return_exceptions_stations"
+                                 constraintName="fk_return_exceptions_stations_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="return_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="station_id"
+                                 baseTableName="return_exceptions_stations"
+                                 constraintName="fk_return_exceptions_stations_2"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000012">
+        <createTable tableName="return_exceptions_departments">
+            <column name="return_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="return_exception_setting_id, department_id" tableName="return_exceptions_departments"/>
+
+        <addForeignKeyConstraint baseColumnNames="return_exception_setting_id"
+                                 baseTableName="return_exceptions_departments"
+                                 constraintName="fk_return_exceptions_departments_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="return_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="return_exceptions_departments"
+                                 constraintName="fk_return_exceptions_departments_2"
+                                 referencedColumnNames="id"
+                                 referencedTableName="department"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000013">
+        <createTable tableName="return_exceptions_cargo_volumes">
+            <column name="return_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_volume_value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="return_exception_setting_id, cargo_volume_value" tableName="return_exceptions_cargo_volumes"/>
+
+        <addForeignKeyConstraint baseColumnNames="return_exception_setting_id"
+                                 baseTableName="return_exceptions_cargo_volumes"
+                                 constraintName="fk_return_exceptions_cargo_volumes_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="return_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_volume_value"
+                                 baseTableName="return_exceptions_cargo_volumes"
+                                 constraintName="fk_return_exceptions_cargo_volumes_2"
+                                 referencedColumnNames="value"
+                                 referencedTableName="cargo_volume"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000014">
+        <createTable tableName="return_exceptions_cargo_classes">
+            <column name="return_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_class_value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="return_exception_setting_id, cargo_class_value" tableName="return_exceptions_cargo_classes"/>
+
+        <addForeignKeyConstraint baseColumnNames="return_exception_setting_id"
+                                 baseTableName="return_exceptions_cargo_classes"
+                                 constraintName="fk_return_exceptions_cargo_classes_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="return_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_class_value"
+                                 baseTableName="return_exceptions_cargo_classes"
+                                 constraintName="fk_return_exceptions_cargo_classes_2"
+                                 referencedColumnNames="value"
+                                 referencedTableName="cargo_class"/>
+    </changeSet>
+
+    <!--begin_exception_setting-->
+    <changeSet author="jhipster" id="00000000000015">
+        <createTable tableName="begin_exception_setting">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="beginExceptionSettingPK"/>
+            </column>
+            <column name="num" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_from_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_to_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_flight_type" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="travel_time" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="load_unload" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rate" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tariff" type="float4">
+                <constraints nullable="false"/>
+            </column>
+            <column name="distance" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="station_from_id"
+                                 baseTableName="begin_exception_setting"
+                                 constraintName="fk_begin_station_from_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+
+        <addForeignKeyConstraint baseColumnNames="station_to_id"
+                                 baseTableName="begin_exception_setting"
+                                 constraintName="fk_begin_station_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_id"
+                                 baseTableName="begin_exception_setting"
+                                 constraintName="fk_begin_cargo_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="cargo"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000016">
+        <createTable tableName="begin_exceptions_roads">
+            <column name="begin_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="road_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="begin_exception_setting_id, road_id" tableName="begin_exceptions_roads"/>
+
+        <addForeignKeyConstraint baseColumnNames="begin_exception_setting_id"
+                                 baseTableName="begin_exceptions_roads"
+                                 constraintName="fk_begin_exceptions_roads_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="begin_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="road_id"
+                                 baseTableName="begin_exceptions_roads"
+                                 constraintName="fk_begin_exceptions_roads_2"
+                                 referencedColumnNames="id"
+                                 referencedTableName="road"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000017">
+        <createTable tableName="begin_exceptions_stations">
+            <column name="begin_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="station_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="begin_exception_setting_id, station_id" tableName="begin_exceptions_stations"/>
+
+        <addForeignKeyConstraint baseColumnNames="begin_exception_setting_id"
+                                 baseTableName="begin_exceptions_stations"
+                                 constraintName="fk_begin_exceptions_stations_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="begin_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="station_id"
+                                 baseTableName="begin_exceptions_stations"
+                                 constraintName="fk_begin_exceptions_stations_2"
+                                 referencedColumnNames="id"
+                                 referencedTableName="station"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000018">
+        <createTable tableName="begin_exceptions_departments">
+            <column name="begin_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="begin_exception_setting_id, department_id" tableName="begin_exceptions_departments"/>
+
+        <addForeignKeyConstraint baseColumnNames="begin_exception_setting_id"
+                                 baseTableName="begin_exceptions_departments"
+                                 constraintName="fk_begin_exceptions_departments_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="begin_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="begin_exceptions_departments"
+                                 constraintName="fk_begin_exceptions_departments_2"
+                                 referencedColumnNames="id"
+                                 referencedTableName="department"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000019">
+        <createTable tableName="begin_exceptions_cargo_volumes">
+            <column name="begin_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_volume_value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="begin_exception_setting_id, cargo_volume_value" tableName="begin_exceptions_cargo_volumes"/>
+
+        <addForeignKeyConstraint baseColumnNames="begin_exception_setting_id"
+                                 baseTableName="begin_exceptions_cargo_volumes"
+                                 constraintName="fk_begin_exceptions_cargo_volumes_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="begin_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_volume_value"
+                                 baseTableName="begin_exceptions_cargo_volumes"
+                                 constraintName="fk_begin_exceptions_cargo_volumes_2"
+                                 referencedColumnNames="value"
+                                 referencedTableName="cargo_volume"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="00000000000020">
+        <createTable tableName="begin_exceptions_cargo_classes">
+            <column name="begin_exception_setting_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cargo_class_value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="begin_exception_setting_id, cargo_class_value" tableName="begin_exceptions_cargo_classes"/>
+
+        <addForeignKeyConstraint baseColumnNames="begin_exception_setting_id"
+                                 baseTableName="begin_exceptions_cargo_classes"
+                                 constraintName="fk_begin_exceptions_cargo_classes_1"
+                                 referencedColumnNames="id"
+                                 referencedTableName="begin_exception_setting"/>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_class_value"
+                                 baseTableName="begin_exceptions_cargo_classes"
+                                 constraintName="fk_begin_exceptions_cargo_classes_2"
+                                 referencedColumnNames="value"
+                                 referencedTableName="cargo_class"/>
+    </changeSet>
+
+    <!--turnover_day_setting-->
+    <changeSet author="jhipster" id="00000000000021">
+        <createTable tableName="turnover_day_setting">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="turnoverDaySettingPK"/>
+            </column>
+            <column name="key" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="float4">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="turnover_day_setting" indexName="turnover_day_key">
+            <column name="key"/>
+        </createIndex>
+
+        <loadData
+            file="config/liquibase/data/turnover_day.csv"
+            separator=";"
+            tableName="turnover_day_setting"/>
+    </changeSet>
+
+    <!--profit_setting-->
+    <changeSet author="jhipster" id="00000000000022">
+        <createTable tableName="profit_setting">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" primaryKeyName="profitSettingPK"/>
+            </column>
+            <column name="cargo_volume_value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="cargo_volume_value"
+                                 baseTableName="profit_setting"
+                                 constraintName="fk_profit_setting_cargo_volume"
+                                 referencedColumnNames="value"
+                                 referencedTableName="cargo_volume"/>
+
+        <loadData
+            file="config/liquibase/data/profit_setting.csv"
+            separator=";"
+            tableName="profit_setting"/>
+    </changeSet>
+
+</databaseChangeLog>

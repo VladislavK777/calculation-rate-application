@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-md-3">
+    <span class="hipster img-fluid rounded"></span>
+  </div>
+
+  <div class="col-md-9">
+    <h1 class="display-4">Расчет маршрута 2.0</h1>
+
+    <div [ngSwitch]="account !== null">
+      <div class="alert alert-success" *ngSwitchCase="true">
+        <span id="home-logged-message" *ngIf="account">Вы вошли как "{{ account.login }}".</span>
+      </div>
+
+      <div class="alert alert-warning" *ngSwitchCase="false">
+        <a class="alert-link" (click)="login()">Войти</a>
+      </div>
+    </div>
+  </div>
+</div>

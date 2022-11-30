@@ -1,0 +1,60 @@
+<div>
+  <h2>
+    <span id="station-heading" data-cy="stationHeading">Справочник станций</span>
+  </h2>
+  <div class="d-flex justify-content-end">
+    <form role="form" (ngSubmit)="loadAll()" [formGroup]="searchControl">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Запрос</mat-label>
+        <input type="text"
+               placeholder="Введите код или название"
+               aria-label="Станция"
+               matInput
+               autocomplete="off"
+               formControlName="stationSearch">
+      </mat-form-field>
+      <button type="submit" class="btn btn-info me-2" data-cy="submit">
+        <span>Поиск</span>
+      </button>
+      <button class="btn btn-primary jh-create-entity" [routerLink]="['./new']">
+        <fa-icon icon="plus"></fa-icon>
+        <span>Добавить станцию</span>
+      </button>
+    </form>
+  </div>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="table-responsive" *ngIf="stations">
+    <table class="table table-striped" aria-describedby="profit-heading">
+      <thead>
+      <tr>
+        <th scope="col"><span>Код</span></th>
+        <th scope="col"><span>Название</span></th>
+        <th scope="col"><span>Дорога</span></th>
+        <th scope="col"><span>Отделение</span></th>
+        <th scope="col"></th>
+      </tr>
+      </thead>
+      <tbody *ngIf="stations">
+      <tr *ngFor="let station of stations">
+        <td>{{ station.code }}</td>
+        <td>{{ station.name }}</td>
+        <td>{{ station.road.name }}</td>
+        <td>{{ station.department?.name }}</td>
+        <td class="text-end">
+          <div class="btn-group">
+            <button type="submit" [routerLink]="['./', station.code, 'edit']" queryParamsHandling="merge"
+                    class="btn btn-primary btn-sm">
+              <fa-icon icon="pencil-alt"></fa-icon>
+              <span class="d-none d-md-inline">Изменить</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

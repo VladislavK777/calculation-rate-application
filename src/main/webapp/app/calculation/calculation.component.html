@@ -1,0 +1,137 @@
+<div class="row">
+  <div class="col-md-3">
+    <span class="hipster img-fluid rounded"></span>
+  </div>
+
+  <div class="col-md-9">
+    <div class="alert alert-danger" *ngIf="messageError != null" data-cy="calсulateError">
+      <strong>Ошибка! {{ messageError }}</strong>
+    </div>
+    <form class="form" role="form" (ngSubmit)="getRout()" [formGroup]="fromControl">
+      <div class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Станция отправления</mat-label>
+          <input #stationFromInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Станция отправления"
+                 matInput
+                 [matAutocomplete]="stationFrom"
+                 formControlName="stationFrom">
+          <mat-autocomplete #stationFrom="matAutocomplete" (optionSelected)="selectedStationFrom($event)">
+            <mat-option *ngFor="let station of stationsFrom | async" [value]="station"
+                        (click)="stationFromInput.value=station.name">
+              {{ station.code }} {{ station.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Станция назначения</mat-label>
+          <input #stationToInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Станция назначения"
+                 matInput
+                 [matAutocomplete]="stationTo"
+                 formControlName="stationTo">
+          <mat-autocomplete #stationTo="matAutocomplete" (optionSelected)="selectedStationTo($event)">
+            <mat-option *ngFor="let station of stationsTo | async" [value]="station"
+                        (click)="stationToInput.value=station.name">
+              {{ station.code }} {{ station.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Груз</mat-label>
+          <input #cargoInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Груз"
+                 matInput
+                 [matAutocomplete]="cargo"
+                 formControlName="cargo">
+          <mat-autocomplete #cargo="matAutocomplete" (optionSelected)="selectedCargo($event)">
+            <mat-option *ngFor="let cargo of cargos | async" [value]="cargo" (click)="cargoInput.value=cargo.name">
+              {{ cargo.code }} {{ cargo.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Объем вагона</mat-label>
+          <mat-select formControlName="cargoVolume">
+            <mat-option *ngFor="let volume of cargoVolume" [value]="volume.value">
+              {{ volume.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <button [disabled]="!checkFillAllFields()" type="submit" class="btn btn-primary me-md-1" data-cy="submit">Построить маршрут</button>
+      <button [disabled]="!checkFillFields()" type="button" class="btn btn-primary me-md-1" (click)="clean()">Очистить</button>
+      <button [disabled]="totalRouts.length == 0" type="button" class="btn btn-primary me-md-5" (click)="downloadFile()">Выгрузить в excel</button>
+      <button [disabled]="!isSelectedFile" type="button" class="btn btn-primary me-md-1" (click)="getGroupRouts()">Групповой расчет</button>
+      <input (change)="selectedFile($event)" type="file" accept=".xlsx">
+    </form>
+    <div class="table-responsive" *ngIf="totalRouts">
+      <div *ngFor="let oneRout of totalRouts">
+        <br>
+        <table class="table-calculate" aria-describedby="user-management-page-heading">
+          <thead>
+          <tr>
+            <th class="table-header" rowspan="3">Станция отправления</th>
+            <th class="table-header" rowspan="3">Дорога отпр.</th>
+            <th class="table-header" rowspan="3">Станция назначения</th>
+            <th class="table-header" rowspan="3">Дорога назн.</th>
+            <th class="table-header" rowspan="3">Наименование груза</th>
+            <th class="table-header" rowspan="3">Расст., км</th>
+            <th class="table-header" rowspan="3">Время в пути, сут</th>
+            <th class="table-header" rowspan="3">Погр. / выгр.</th>
+            <th class="table-header" rowspan="3">Оборот, сут.</th>
+            <th class="table-header" rowspan="3">ВО</th>
+            <th class="table-header" rowspan="2">ДОХОД</th>
+            <th class="table-header">РАСХОД</th>
+            <th class="table-header" colspan="1">ПРИБЫЛЬ</th>
+          </tr>
+          <tr>
+            <th class="table-header">Тариф в собств. вагонах</th>
+            <th class="table-header">За нахождение в пути</th>
+          </tr>
+          <tr>
+            <th class="table-header">руб/ваг.</th>
+            <th class="table-header">руб/ваг.</th>
+            <th class="table-header">руб/ваг.</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let r of oneRout.rout">
+            <td [ngClass]="r.requestRout  ? 'table-body-request-rout' : 'table-body'">{{ r.stationFromName }}</td>
+            <td [ngClass]="r.requestRout  ? 'table-body-request-rout' : 'table-body'">{{ r.roadFromNameShort }}</td>
+            <td [ngClass]="r.requestRout  ? 'table-body-request-rout' : 'table-body'">{{ r.stationToName }}</td>
+            <td [ngClass]="r.requestRout  ? 'table-body-request-rout' : 'table-body'">{{ r.roadToNameShort }}</td>
+            <td class="table-body">{{ r.cargoName }}</td>
+            <td class="table-body">{{ r.distance }}</td>
+            <td class="table-body">{{ r.travelTime }}</td>
+            <td class="table-body">{{ r.loadUnload }}</td>
+            <td class="table-body">{{ r.fullCountDays }}</td>
+            <td class="table-body">поваг</td>
+            <td [ngClass]="r.requestRout  ? 'table-body-request-rout' : 'table-body'">{{ r.rate }}</td>
+            <td class="table-body">{{ r.tariff }}</td>
+            <td class="table-body">{{ r.rate - r.tariff }}</td>
+          </tr>
+          <tr>
+            <td class="table-footer" colspan="15"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,71 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="myStationLabel">{{ station.id != null ? 'Редактировать' : 'Создать' }} станцию {{ station.name }}</h2>
+
+      <div class="alert alert-danger" *ngIf="messageError != null" data-cy="stationError">
+        <strong>Ошибка! {{ messageError }}</strong>
+      </div>
+
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Код</mat-label>
+          <input type="text"
+                 name="code"
+                 matInput
+                 formControlName="code">
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Название</mat-label>
+          <input type="text"
+                 name="name"
+                 matInput
+                 autocomplete="off"
+                 formControlName="name">
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Дорога</mat-label>
+          <input #roadInput type="text"
+                 name="road"
+                 matInput
+                 [matAutocomplete]="road"
+                 formControlName="road">
+          <mat-autocomplete #road="matAutocomplete" (optionSelected)="selectedRoad($event)">
+            <mat-option *ngFor="let road of roads | async" [value]="road" (click)="roadInput.value=road.name">
+              {{ road.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Отделение</mat-label>
+          <input #departmentInput type="text"
+                 name="department"
+                 matInput
+                 [matAutocomplete]="department"
+                 formControlName="department">
+          <mat-autocomplete #department="matAutocomplete" (optionSelected)="selectedDepartment($event)">
+            <mat-option *ngFor="let department of departments | async" [value]="department"
+                        (click)="departmentInput.value=department.name">
+              {{ department.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+        <fa-icon icon="save"></fa-icon>&nbsp;<span>Сохранить</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="previousState()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Отмена</span>
+      </button>
+
+    </form>
+  </div>
+</div>
