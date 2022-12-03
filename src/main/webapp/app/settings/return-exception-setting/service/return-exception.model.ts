@@ -16,11 +16,11 @@ export interface ReturnException {
   stationReturn: Station | null;
   stationFrom: Station | null;
   stationTo: Station | null;
-  cargo: Cargo;
+  cargo: Cargo | null;
   cargoFlightType: string;
-  travelTime: number;
-  loadUnload: number;
-  distance: number;
-  rate: number;
-  tariff: number;
+  travelTime: number | null;
+  loadUnload: number | null;
+  distance: number | null;
+  rate: number | null;
+  tariff: number | null;
 }

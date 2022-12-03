@@ -4,6 +4,7 @@ import io.diana.calculaterate.domain.cargo.CargoClass;
 import io.diana.calculaterate.domain.cargo.CargoVolume;
 import io.diana.calculaterate.domain.setting.ReturnExceptionSetting;
 import io.diana.calculaterate.domain.station.Road;
+import io.diana.calculaterate.enums.CargoFlightType;
 import io.diana.calculaterate.repository.setting.ReturnExceptionSettingRepository;
 import io.diana.calculaterate.web.rest.errors.BadRequestAlertException;
 import org.springframework.data.domain.PageRequest;
@@ -72,24 +73,25 @@ public class ReturnExceptionSettingService {
                 throw new BadRequestAlertException(null, "необходимо заполнить поле 'станция отправления'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
             if (Objects.isNull(returnExceptionSetting.getStationTo()))
                 throw new BadRequestAlertException(null, "необходимо заполнить поле 'станция назначение'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (returnExceptionSetting.getCargoVolumes().isEmpty())
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'объем вагона'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (returnExceptionSetting.getCargoClasses().isEmpty())
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'класс груза'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (Objects.isNull(returnExceptionSetting.getCargoFlightType()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'тип рейса'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (CargoFlightType.FULL.equals(returnExceptionSetting.getCargoFlightType()))
+                if (Objects.isNull(returnExceptionSetting.getCargo()))
+                    throw new BadRequestAlertException(null, "необходимо заполнить поле 'груз'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (Objects.isNull(returnExceptionSetting.getDistance()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'расстояние'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (Objects.isNull(returnExceptionSetting.getTravelTime()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'время в пути'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (Objects.isNull(returnExceptionSetting.getLoadUnload()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'погрузка/разгрузка'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (Objects.isNull(returnExceptionSetting.getRate()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'ставка'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
+            if (Objects.isNull(returnExceptionSetting.getTariff()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'тариф'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
         }
-        if (Objects.isNull(returnExceptionSetting.getCargo()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'груз'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (returnExceptionSetting.getCargoVolumes().isEmpty())
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'объем вагона'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (returnExceptionSetting.getCargoClasses().isEmpty())
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'класс груза'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(returnExceptionSetting.getCargoFlightType()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'тип рейса'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(returnExceptionSetting.getDistance()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'расстояние'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(returnExceptionSetting.getTravelTime()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'время в пути'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(returnExceptionSetting.getLoadUnload()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'погрузка/разгрузка'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(returnExceptionSetting.getRate()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'ставка'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(returnExceptionSetting.getTariff()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'тариф'", ReturnExceptionSettingService.class.getSimpleName(), "validationError");
     }
 }

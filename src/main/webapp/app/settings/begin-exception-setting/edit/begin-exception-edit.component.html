@@ -115,22 +115,6 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div class="mb-3">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Груз</mat-label>
-          <input #cargoInput type="text"
-                 placeholder="Введите код или название"
-                 aria-label="Груз"
-                 matInput
-                 [matAutocomplete]="cargo"
-                 formControlName="cargo">
-          <mat-autocomplete #cargo="matAutocomplete" (optionSelected)="selectedCargo($event)">
-            <mat-option *ngFor="let cargo of cargos | async" [value]="cargo" (click)="cargoInput.value=cargo.name">
-              {{ cargo.code }} {{ cargo.name }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-form-field>
-      </div>
       <div class="mb-3" *ngIf="editForm.value.id">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Тип рейса</mat-label>
@@ -149,6 +133,22 @@
               {{ type }}
             </mat-option>
           </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.cargoFlightType == 'ПОР'">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Груз</mat-label>
+          <input #cargoInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Груз"
+                 matInput
+                 [matAutocomplete]="cargo"
+                 formControlName="cargo">
+          <mat-autocomplete #cargo="matAutocomplete" (optionSelected)="selectedCargo($event)">
+            <mat-option *ngFor="let cargo of cargos | async" [value]="cargo" (click)="cargoInput.value=cargo.name">
+              {{ cargo.code }} {{ cargo.name }}
+            </mat-option>
+          </mat-autocomplete>
         </mat-form-field>
       </div>
       <div class="mb-3">
@@ -173,7 +173,7 @@
       </div>
       <div class="mb-3">
         <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Погрузка/Разгрузка</mat-label>
+          <mat-label>Погрузка/Выгрузка</mat-label>
           <input type="number"
                  name="loadUnload"
                  matInput

@@ -15,7 +15,7 @@ export interface BeginException {
   cargoClasses: CargoClass[];
   stationFrom: Station;
   stationTo: Station;
-  cargo: Cargo;
+  cargo: Cargo | null;
   cargoFlightType: string;
   travelTime: number;
   loadUnload: number;

@@ -124,8 +124,16 @@ export class BeginExceptionEditComponent implements OnInit {
       filter: '',
       roadId: this.selectedRoadIds
     }).subscribe(response => this.departmentList = response);
-    this.cargoClassService.findAll().subscribe(response => this.cargoClassList = response);
-    this.cargoVolumeService.findAll().subscribe(response => this.cargoVolumeList = response);
+    this.cargoClassService.findAll().subscribe(response => {
+      this.cargoClassList = response;
+      if (this.beginException == null)
+        this.setCargoClassesFromServer(response);
+    });
+    this.cargoVolumeService.findAll().subscribe(response => {
+      this.cargoVolumeList = response;
+      if (this.beginException == null)
+        this.setCargoVolumesFromServer(response);
+    });
 
     this.editForm.get('stationFrom')?.valueChanges.pipe(
       startWith(''),
@@ -309,9 +317,19 @@ export class BeginExceptionEditComponent implements OnInit {
     this.editForm.get('cargoVolumes')?.setValue(this.selectedCargoVolumeValues);
   }
 
+  private setCargoVolumesFromServer(cargoVolumes: CargoVolume[]) {
+    cargoVolumes.forEach((volume) => this.selectedCargoVolumeValues.push(volume.value));
+    this.editForm.get('cargoVolumes')?.setValue(this.selectedCargoVolumeValues);
+  }
+
   private setCargoClasses(beginException: any) {
     let selectedCargoClasses: CargoClass[] = beginException.cargoClasses;
     selectedCargoClasses.forEach((classes) => this.selectedCargoClassValues.push(classes.value));
+    this.editForm.get('cargoClasses')?.setValue(this.selectedCargoClassValues);
+  }
+
+  private setCargoClassesFromServer(cargoClasses: CargoClass[]) {
+    cargoClasses.forEach((volume) => volume.value != 0 ? this.selectedCargoClassValues.push(volume.value) : null);
     this.editForm.get('cargoClasses')?.setValue(this.selectedCargoClassValues);
   }
 

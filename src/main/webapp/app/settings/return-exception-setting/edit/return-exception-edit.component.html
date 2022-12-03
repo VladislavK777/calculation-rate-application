@@ -132,7 +132,27 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" [hidden]="editForm.value.stationReturn" *ngIf="editForm.value.id">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Тип рейса</mat-label>
+          <input type="text"
+                 matInput
+                 formControlName="cargoFlightType"
+                 [readonly]="true"
+                 autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn" *ngIf="!editForm.value.id">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Тип рейса</mat-label>
+          <mat-select formControlName="cargoFlightType">
+            <mat-option *ngFor="let type of cargoType" value="{{type}}">
+              {{ type }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn || editForm.value.cargoFlightType == 'ПОР'">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Груз</mat-label>
           <input #cargoInput type="text"
@@ -148,27 +168,7 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div class="mb-3" *ngIf="editForm.value.id">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Тип рейса</mat-label>
-          <input type="text"
-                 matInput
-                 formControlName="cargoFlightType"
-                 [readonly]="true"
-                 autocomplete="off">
-        </mat-form-field>
-      </div>
-      <div class="mb-3" *ngIf="!editForm.value.id">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Тип рейса</mat-label>
-          <mat-select formControlName="cargoFlightType">
-            <mat-option *ngFor="let type of cargoType" value="{{type}}">
-              {{ type }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="mb-3">
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Растояние</mat-label>
           <input type="number"
@@ -178,7 +178,7 @@
                  formControlName="distance">
         </mat-form-field>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Время в пути</mat-label>
           <input type="number"
@@ -188,9 +188,9 @@
                  formControlName="travelTime">
         </mat-form-field>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
         <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Погрузка/Разгрузка</mat-label>
+          <mat-label>Погрузка/Выгрузка</mat-label>
           <input type="number"
                  name="loadUnload"
                  matInput
@@ -198,7 +198,7 @@
                  formControlName="loadUnload">
         </mat-form-field>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Ставка</mat-label>
           <input type="number"
@@ -208,7 +208,7 @@
                  formControlName="rate">
         </mat-form-field>
       </div>
-      <div class="mb-3">
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Тариф</mat-label>
           <input type="number"

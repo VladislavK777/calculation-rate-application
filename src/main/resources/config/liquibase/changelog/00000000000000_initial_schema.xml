@@ -314,27 +314,15 @@
             <column name="station_return_id" type="bigint"/>
             <column name="station_from_id" type="bigint"/>
             <column name="station_to_id" type="bigint"/>
-            <column name="cargo_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
+            <column name="cargo_id" type="bigint"/>
             <column name="cargo_flight_type" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="travel_time" type="float4">
-                <constraints nullable="false"/>
-            </column>
-            <column name="load_unload" type="float4">
-                <constraints nullable="false"/>
-            </column>
-            <column name="rate" type="float4">
-                <constraints nullable="false"/>
-            </column>
-            <column name="tariff" type="float4">
-                <constraints nullable="false"/>
-            </column>
-            <column name="distance" type="bigint">
-                <constraints nullable="false"/>
-            </column>
+            <column name="travel_time" type="float4"/>
+            <column name="load_unload" type="float4"/>
+            <column name="rate" type="float4"/>
+            <column name="tariff" type="float4"/>
+            <column name="distance" type="bigint"/>
         </createTable>
 
         <addForeignKeyConstraint baseColumnNames="station_return_id"
@@ -502,9 +490,7 @@
             <column name="station_to_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="cargo_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
+            <column name="cargo_id" type="bigint"/>
             <column name="cargo_flight_type" type="varchar(10)">
                 <constraints nullable="false"/>
             </column>
@@ -718,5 +704,4 @@
             separator=";"
             tableName="profit_setting"/>
     </changeSet>
-
 </databaseChangeLog>

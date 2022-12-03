@@ -94,7 +94,6 @@ public class ReturnExceptionSetting {
     @JoinColumn(name = "station_to_id")
     private Station stationTo;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;
@@ -102,16 +101,10 @@ public class ReturnExceptionSetting {
     @NotNull
     @Enumerated(EnumType.STRING)
     private CargoFlightType cargoFlightType;
-
-    @NotNull
     private Double travelTime;
-    @NotNull
     private Double loadUnload;
-    @NotNull
     private Long distance;
-    @NotNull
     private Double rate;
-    @NotNull
     private Double tariff;
 
     public Long getId() {

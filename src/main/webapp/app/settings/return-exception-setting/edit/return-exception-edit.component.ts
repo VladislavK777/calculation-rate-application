@@ -130,8 +130,16 @@ export class ReturnExceptionEditComponent implements OnInit {
       filter: '',
       roadId: this.selectedRoadIds
     }).subscribe(response => this.departmentList = response);
-    this.cargoClassService.findAll().subscribe(response => this.cargoClassList = response);
-    this.cargoVolumeService.findAll().subscribe(response => this.cargoVolumeList = response);
+    this.cargoClassService.findAll().subscribe(response => {
+      this.cargoClassList = response;
+      if (this.returnException == null)
+        this.setCargoClassesFromServer(response);
+    });
+    this.cargoVolumeService.findAll().subscribe(response => {
+      this.cargoVolumeList = response;
+      if (this.returnException == null)
+        this.setCargoVolumesFromServer(response);
+    });
 
     this.editForm.get('stationReturn')?.valueChanges.pipe(
       startWith(''),
@@ -174,7 +182,7 @@ export class ReturnExceptionEditComponent implements OnInit {
         stationFrom: this.stationFrom,
         stationTo: this.stationTo,
         cargo: this.cargo,
-        cargoFlightType: this.editForm.value.cargoFlightType != null ? this.getCargoFlightTypeEnum(this.editForm.value.cargoFlightType) : 'FULL',
+        cargoFlightType: this.editForm.value.cargoFlightType != null ? this.getCargoFlightTypeEnum(this.editForm.value.cargoFlightType) : 'EMPTY',
         travelTime: this.editForm.value.travelTime,
         loadUnload: this.editForm.value.loadUnload,
         distance: this.editForm.value.distance,
@@ -324,9 +332,19 @@ export class ReturnExceptionEditComponent implements OnInit {
     this.editForm.get('cargoVolumes')?.setValue(this.selectedCargoVolumeValues);
   }
 
+  private setCargoVolumesFromServer(cargoVolumes: CargoVolume[]) {
+    cargoVolumes.forEach((volume) => this.selectedCargoVolumeValues.push(volume.value));
+    this.editForm.get('cargoVolumes')?.setValue(this.selectedCargoVolumeValues);
+  }
+
   private setCargoClasses(beginException: any) {
     let selectedCargoClasses: CargoClass[] = beginException.cargoClasses;
     selectedCargoClasses.forEach((classes) => this.selectedCargoClassValues.push(classes.value));
+    this.editForm.get('cargoClasses')?.setValue(this.selectedCargoClassValues);
+  }
+
+  private setCargoClassesFromServer(cargoClasses: CargoClass[]) {
+    cargoClasses.forEach((volume) => volume.value != 0 ? this.selectedCargoClassValues.push(volume.value) : null);
     this.editForm.get('cargoClasses')?.setValue(this.selectedCargoClassValues);
   }
 

@@ -92,7 +92,6 @@ public class BeginExceptionSetting {
     @JoinColumn(name = "station_to_id")
     private Station stationTo;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "cargo_id")
     private Cargo cargo;

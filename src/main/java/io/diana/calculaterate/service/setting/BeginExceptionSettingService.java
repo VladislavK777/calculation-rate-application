@@ -4,6 +4,7 @@ import io.diana.calculaterate.domain.cargo.CargoClass;
 import io.diana.calculaterate.domain.cargo.CargoVolume;
 import io.diana.calculaterate.domain.setting.BeginExceptionSetting;
 import io.diana.calculaterate.domain.station.Road;
+import io.diana.calculaterate.enums.CargoFlightType;
 import io.diana.calculaterate.repository.setting.BeginExceptionSettingRepository;
 import io.diana.calculaterate.web.rest.errors.BadRequestAlertException;
 import org.springframework.data.domain.PageRequest;
@@ -66,14 +67,15 @@ public class BeginExceptionSettingService {
             throw new BadRequestAlertException(null, "необходимо заполнить поле 'станция отправления'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
         if (Objects.isNull(beginExceptionSetting.getStationTo()))
             throw new BadRequestAlertException(null, "необходимо заполнить поле 'станция назначение'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
-        if (Objects.isNull(beginExceptionSetting.getCargo()))
-            throw new BadRequestAlertException(null, "необходимо заполнить поле 'груз'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
         if (beginExceptionSetting.getCargoVolumes().isEmpty())
             throw new BadRequestAlertException(null, "необходимо заполнить поле 'объем вагона'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
         if (beginExceptionSetting.getCargoClasses().isEmpty())
             throw new BadRequestAlertException(null, "необходимо заполнить поле 'класс груза'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
         if (Objects.isNull(beginExceptionSetting.getCargoFlightType()))
             throw new BadRequestAlertException(null, "необходимо заполнить поле 'тип рейса'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
+        if (CargoFlightType.FULL.equals(beginExceptionSetting.getCargoFlightType()))
+            if (Objects.isNull(beginExceptionSetting.getCargo()))
+                throw new BadRequestAlertException(null, "необходимо заполнить поле 'груз'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
         if (Objects.isNull(beginExceptionSetting.getDistance()))
             throw new BadRequestAlertException(null, "необходимо заполнить поле 'расстояние'", BeginExceptionSettingService.class.getSimpleName(), "validationError");
         if (Objects.isNull(beginExceptionSetting.getTravelTime()))

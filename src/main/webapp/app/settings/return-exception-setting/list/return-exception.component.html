@@ -35,7 +35,7 @@
         <th scope="col"><span>Тир рейса</span></th>
         <th scope="col"><span>Растояние</span></th>
         <th scope="col"><span>Время в пути</span></th>
-        <th scope="col"><span>Погрузка/Разгрузка</span></th>
+        <th scope="col"><span>Погрузка/Выгрузка</span></th>
         <th scope="col"><span>Ставка</span></th>
         <th scope="col"><span>Тариф</span></th>
         <th scope="col"></th>
@@ -72,7 +72,7 @@
         <td>{{ returnException.stationReturn?.name }}</td>
         <td>{{ returnException.stationFrom?.name }}</td>
         <td>{{ returnException.stationTo?.name }}</td>
-        <td>{{ returnException.cargo.name }}</td>
+        <td>{{ returnException.cargo?.name }}</td>
         <td>{{ getCargoFlightType(returnException.cargoFlightType) }}</td>
         <td>{{ returnException.distance }}</td>
         <td>{{ returnException.travelTime }}</td>
