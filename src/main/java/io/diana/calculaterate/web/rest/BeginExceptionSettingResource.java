@@ -28,7 +28,7 @@ public class BeginExceptionSettingResource {
     }
 
     @GetMapping
-    public ResponseEntity<Set<BeginExceptionSetting>> findAll() {
+    public ResponseEntity<List<BeginExceptionSetting>> findAll() {
         return new ResponseEntity<>(beginExceptionSettingService.findAll(), OK);
     }
 

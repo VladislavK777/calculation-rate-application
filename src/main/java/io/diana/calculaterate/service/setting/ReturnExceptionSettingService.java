@@ -12,10 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Service
 public class ReturnExceptionSettingService {
@@ -26,8 +24,8 @@ public class ReturnExceptionSettingService {
     }
 
     @Transactional(readOnly = true)
-    public Set<ReturnExceptionSetting> findAll() {
-        return new HashSet<>(returnExceptionSettingRepository.findAll(PageRequest.of(0, 300, Sort.Direction.ASC, "stations", "departments", "num", "roads")).getContent());
+    public List<ReturnExceptionSetting> findAll() {
+        return returnExceptionSettingRepository.findAll(PageRequest.of(0, 300, Sort.Direction.ASC, "roads.name", "num", "departments.name", "stations.name")).getContent();
     }
 
     @Transactional(readOnly = true)
@@ -37,7 +35,8 @@ public class ReturnExceptionSettingService {
 
     @Transactional(readOnly = true)
     public ReturnExceptionSetting getOne(Long id) {
-        return returnExceptionSettingRepository.getReferenceById(id);
+        return returnExceptionSettingRepository.findById(id)
+            .orElseThrow(() -> new BadRequestAlertException(null, "возратное исключение с id: " + id + " не найдено", ReturnExceptionSetting.class.getSimpleName(), "notFound"));
     }
 
     @Transactional

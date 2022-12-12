@@ -22,6 +22,7 @@ export class BeginExceptionComponent implements OnInit {
   }
 
   loadAll(): void {
+    this.messageError = null;
     this.isLoading = false;
     this.beginExceptionService.findAll().subscribe(
       response => this.beginExceptions = response,

@@ -5,7 +5,7 @@ import io.diana.calculaterate.service.setting.ReturnExceptionSettingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -25,7 +25,7 @@ public class ReturnExceptionSettingResource {
     }
 
     @GetMapping
-    public ResponseEntity<Set<ReturnExceptionSetting>> findAll() {
+    public ResponseEntity<List<ReturnExceptionSetting>> findAll() {
         return new ResponseEntity<>(returnExceptionSettingService.findAll(), OK);
     }
 

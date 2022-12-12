@@ -22,6 +22,7 @@ export class ReturnExceptionComponent implements OnInit {
   }
 
   loadAll(): void {
+    this.messageError = null;
     this.isLoading = false;
     this.returnExceptionService.findAll().subscribe(
       response => this.returnExceptions = response,

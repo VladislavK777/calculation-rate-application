@@ -16,6 +16,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.*;
 
+import static org.apache.commons.math3.util.Precision.round;
+
 @Entity
 @Table(name = "return_exception_setting")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -196,7 +198,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getTravelTime() {
-        return travelTime;
+        return round(travelTime, 2);
     }
 
     public void setTravelTime(Double travelTime) {
@@ -204,7 +206,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getLoadUnload() {
-        return loadUnload;
+        return round(loadUnload, 2);
     }
 
     public void setLoadUnload(Double loadUnload) {
@@ -220,7 +222,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getRate() {
-        return rate;
+        return round(rate, 2);
     }
 
     public void setRate(Double rate) {
@@ -228,7 +230,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getTariff() {
-        return tariff;
+        return round(tariff, 2);
     }
 
     public void setTariff(Double tariff) {
