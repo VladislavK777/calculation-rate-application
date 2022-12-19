@@ -5,6 +5,7 @@ import {ReturnException} from "./service/return-exception.model";
 import {ReturnExceptionService} from "./service/return-exception.service";
 import {ReturnExceptionComponent} from "./list/return-exception.component";
 import {ReturnExceptionEditComponent} from "./edit/return-exception-edit.component";
+import {ReturnExceptionCopyComponent} from "./copy/return-exception-copy.component";
 
 @Injectable({providedIn: 'root'})
 export class ReturnExceptionResolve implements Resolve<ReturnException | null> {
@@ -35,6 +36,13 @@ export const returnExceptionSettingRoute: Routes = [
   {
     path: ':id/edit',
     component: ReturnExceptionEditComponent,
+    resolve: {
+      returnException: ReturnExceptionResolve,
+    },
+  },
+  {
+    path: ':id/copy',
+    component: ReturnExceptionCopyComponent,
     resolve: {
       returnException: ReturnExceptionResolve,
     },

@@ -5,6 +5,7 @@ import {BeginException} from "./service/begin-exception.model";
 import {BeginExceptionComponent} from "./list/begin-exception.component";
 import {BeginExceptionService} from "./service/begin-exception.service";
 import {BeginExceptionEditComponent} from "./edit/begin-exception-edit.component";
+import {BeginExceptionCopyComponent} from "./copy/begin-exception-copy.component";
 
 @Injectable({providedIn: 'root'})
 export class BeginExceptionResolve implements Resolve<BeginException | null> {
@@ -35,6 +36,13 @@ export const beginExceptionSettingRoute: Routes = [
   {
     path: ':id/edit',
     component: BeginExceptionEditComponent,
+    resolve: {
+      beginException: BeginExceptionResolve,
+    },
+  },
+  {
+    path: ':id/copy',
+    component: BeginExceptionCopyComponent,
     resolve: {
       beginException: BeginExceptionResolve,
     },

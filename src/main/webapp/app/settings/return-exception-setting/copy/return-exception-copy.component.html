@@ -1,0 +1,221 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="myReturnExceptionLabel">Создать возвратное исключение</h2>
+
+      <div class="alert alert-danger" *ngIf="messageError != null" data-cy="returnExceptionCopyError">
+        <strong>Ошибка! {{ messageError }}</strong>
+      </div>
+
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Порядок</mat-label>
+          <input type="text"
+                 name="num"
+                 matInput
+                 formControlName="num"
+                 autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Дороги</mat-label>
+          <mat-select formControlName="roads" [multiple]="true">
+            <mat-option *ngFor="let road of roadList" [value]="road.id" (click)="selectedRoadId(road.id)">
+              {{ road.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Станции исключения</mat-label>
+          <mat-select formControlName="stations" [multiple]="true" (openedChange)="openedChangeStation($event)">
+            <input type="text"
+                   matInput
+                   placeholder="Введите код или название"
+                   autocomplete="off"
+                   (keyup)="searchStationsByInput($event)">
+            <mat-option *ngFor="let station of stationList" [value]="station.id"
+                        (click)="selectedStationId(station.id)">
+              {{ station.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Отделения исключения</mat-label>
+          <mat-select formControlName="departments" [multiple]="true" (openedChange)="openedChangeDepartment($event)">
+            <input type="text"
+                   matInput
+                   placeholder="Введите код или название"
+                   autocomplete="off"
+                   (keyup)="searchDepartmentsByInput($event)">
+            <mat-option *ngFor="let department of departmentList" [value]="department.id"
+                        (click)="selectedDepartmentId(department.id)">
+              {{ department.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Объем вагона</mat-label>
+          <mat-select formControlName="cargoVolumes" [multiple]="true">
+            <mat-option *ngFor="let cargoVolume of cargoVolumeList" [value]="cargoVolume.value"
+                        (click)="selectedCargoVolumeValue(cargoVolume.value)">
+              {{ cargoVolume.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Класс груза</mat-label>
+          <mat-select formControlName="cargoClasses" [multiple]="true">
+            <mat-option *ngFor="let cargoClass of cargoClassList" [value]="cargoClass.value"
+                        (click)="selectedCargoClassValue(cargoClass.value)">
+              {{ cargoClass.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationFrom || editForm.value.stationTo">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Станция возврата</mat-label>
+          <input #stationReturnInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Станция отправления"
+                 matInput
+                 [matAutocomplete]="stationReturn"
+                 formControlName="stationReturn">
+          <mat-autocomplete #stationReturn="matAutocomplete" (optionSelected)="selectedStationReturn($event)">
+            <mat-option *ngFor="let station of stationsReturn | async" [value]="station"
+                        (click)="stationReturnInput.value=station.name">
+              {{ station.code }} {{ station.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Станция отправления</mat-label>
+          <input #stationFromInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Станция отправления"
+                 matInput
+                 [matAutocomplete]="stationFrom"
+                 formControlName="stationFrom">
+          <mat-autocomplete #stationFrom="matAutocomplete" (optionSelected)="selectedStationFrom($event)">
+            <mat-option *ngFor="let station of stationsFrom | async" [value]="station"
+                        (click)="stationFromInput.value=station.name">
+              {{ station.code }} {{ station.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Станция назначения</mat-label>
+          <input #stationToInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Станция назначения"
+                 matInput
+                 [matAutocomplete]="stationTo"
+                 formControlName="stationTo">
+          <mat-autocomplete #stationTo="matAutocomplete" (optionSelected)="selectedStationTo($event)">
+            <mat-option *ngFor="let station of stationsTo | async" [value]="station"
+                        (click)="stationToInput.value=station.name">
+              {{ station.code }} {{ station.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Тип рейса</mat-label>
+          <input type="text"
+                 matInput
+                 formControlName="cargoFlightType"
+                 [readonly]="true"
+                 autocomplete="off">
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn || editForm.value.cargoFlightType == 'ПОР'">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Груз</mat-label>
+          <input #cargoInput type="text"
+                 placeholder="Введите код или название"
+                 aria-label="Груз"
+                 matInput
+                 [matAutocomplete]="cargo"
+                 formControlName="cargo">
+          <mat-autocomplete #cargo="matAutocomplete" (optionSelected)="selectedCargo($event)">
+            <mat-option *ngFor="let cargo of cargos | async" [value]="cargo" (click)="cargoInput.value=cargo.name">
+              {{ cargo.code }} {{ cargo.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Растояние</mat-label>
+          <input type="number"
+                 name="distance"
+                 matInput
+                 autocomplete="off"
+                 formControlName="distance">
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Время в пути</mat-label>
+          <input type="number"
+                 name="travelTime"
+                 matInput
+                 autocomplete="off"
+                 formControlName="travelTime">
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Погрузка/Выгрузка</mat-label>
+          <input type="number"
+                 name="loadUnload"
+                 matInput
+                 autocomplete="off"
+                 formControlName="loadUnload">
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Ставка</mat-label>
+          <input type="number"
+                 name="rate"
+                 matInput
+                 autocomplete="off"
+                 formControlName="rate">
+        </mat-form-field>
+      </div>
+      <div class="mb-3" [hidden]="editForm.value.stationReturn">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Тариф</mat-label>
+          <input type="number"
+                 name="tariff"
+                 matInput
+                 autocomplete="off"
+                 formControlName="tariff">
+        </mat-form-field>
+      </div>
+
+      <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-primary">
+        <fa-icon icon="save"></fa-icon>&nbsp;<span>Сохранить</span>
+      </button>
+
+      <button type="button" class="btn btn-secondary" (click)="previousState()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span>Отмена</span>
+      </button>
+    </form>
+  </div>
+</div>

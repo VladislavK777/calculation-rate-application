@@ -12,6 +12,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,7 +27,13 @@ public class BeginExceptionSettingService {
 
     @Transactional(readOnly = true)
     public List<BeginExceptionSetting> findAll() {
-        return beginExceptionSettingRepository.findAll(PageRequest.of(0, 300, Sort.Direction.ASC, "roads.name", "num", "departments.name", "stations.name")).getContent();
+        return new ArrayList<>(
+            new LinkedHashSet<>(
+                beginExceptionSettingRepository.findAll(
+                    PageRequest.of(0, 500, Sort.Direction.ASC, "roads.name", "num", "departments.name", "stations.name")
+                ).getContent()
+            )
+        );
     }
 
     @Transactional(readOnly = true)

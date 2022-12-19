@@ -80,8 +80,12 @@
         <td class="text-end">
           <div class="btn-group">
             <button type="submit" [routerLink]="['./', beginException.id, 'edit']" queryParamsHandling="merge"
-                    class="btn btn-primary btn-sm">
+                    class="btn btn-primary btn-sm me-md-1">
               <span class="d-none d-md-inline">Изменить</span>
+            </button>
+            <button type="submit" [routerLink]="['./', beginException.id, 'copy']" queryParamsHandling="merge"
+                    class="btn btn-primary btn-sm me-md-1">
+              <span class="d-none d-md-inline">Копировать</span>
             </button>
             <button type="button" class="btn btn-danger btn-sm" (click)="delete(beginException)">
               <span class="d-none d-md-inline">Удалить</span>
