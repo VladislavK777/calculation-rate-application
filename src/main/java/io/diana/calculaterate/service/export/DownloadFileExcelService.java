@@ -184,16 +184,14 @@ public class DownloadFileExcelService {
                 cargo.setCellStyle(cellStyleFieldCargo(workbook));
 
                 Cell distance = row.createCell(6);
-                if (route.getDistance() > 0) {
+                if (route.getDistance() > 0)
                     distance.setCellValue(route.getDistance());
-                    distance.setCellStyle(cellStyleFieldFormatDistance(workbook));
-                }
+                distance.setCellStyle(cellStyleFieldFormatDistance(workbook));
 
                 Cell countDays = row.createCell(7);
-                if (route.getTravelTime() > 0) {
+                if (route.getTravelTime() > 0)
                     countDays.setCellValue(route.getTravelTime());
-                    countDays.setCellStyle(cellStyleField(workbook));
-                }
+                countDays.setCellStyle(cellStyleField(workbook));
 
                 Cell countDaysLoadUnload = row.createCell(8);
                 countDaysLoadUnload.setCellValue(route.getLoadUnload());
@@ -218,12 +216,11 @@ public class DownloadFileExcelService {
 
 
                 Cell tariff = row.createCell(12);
-                if (route.getTariff() == 0) {
+                if (route.getTariff() == 0)
                     tariff.setCellStyle(cellStyleFieldNull(workbook));
-                } else {
+                else
                     tariff.setCellValue(route.getTariff());
-                    tariff.setCellStyle(cellStyleFieldFormat(workbook));
-                }
+                tariff.setCellStyle(cellStyleFieldFormat(workbook));
 
                 Cell rateTariff = row.createCell(13);
                 rateTariff.setCellFormula("L" + num + "-M" + num);
