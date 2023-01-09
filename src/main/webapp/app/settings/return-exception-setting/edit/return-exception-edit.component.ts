@@ -282,16 +282,27 @@ export class ReturnExceptionEditComponent implements OnInit {
   selectedStationReturn(e: any) {
     this.stationReturn = e.option.value;
     this.editForm.get('stationReturn')?.setValue(this.stationReturn?.name || '');
+    this.stationFrom = null;
+    this.stationTo = null;
+    this.cargo = null;
+    this.editForm.get('travelTime')?.setValue(null);
+    this.editForm.get('loadUnload')?.setValue(null);
+    this.editForm.get('distance')?.setValue(null);
+    this.editForm.get('rate')?.setValue(null);
+    this.editForm.get('tariff')?.setValue(null);
+    this.editForm.get('cargoFlightType')?.setValue('ПОР');
   }
 
   selectedStationFrom(e: any) {
     this.stationFrom = e.option.value;
     this.editForm.get('stationFrom')?.setValue(this.stationFrom?.name || '');
+    this.stationReturn = null;
   }
 
   selectedStationTo(e: any) {
     this.stationTo = e.option.value;
     this.editForm.get('stationTo')?.setValue(this.stationTo?.name || '');
+    this.stationReturn = null;
   }
 
   selectedCargo(e: any) {

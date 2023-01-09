@@ -9,9 +9,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static io.diana.calculaterate.service.export.CellStyleCommon.*;
@@ -182,12 +184,16 @@ public class DownloadFileExcelService {
                 cargo.setCellStyle(cellStyleFieldCargo(workbook));
 
                 Cell distance = row.createCell(6);
-                distance.setCellValue(route.getDistance());
-                distance.setCellStyle(cellStyleFieldFormatDistance(workbook));
+                if (route.getDistance() > 0) {
+                    distance.setCellValue(route.getDistance());
+                    distance.setCellStyle(cellStyleFieldFormatDistance(workbook));
+                }
 
                 Cell countDays = row.createCell(7);
-                countDays.setCellValue(route.getTravelTime());
-                countDays.setCellStyle(cellStyleField(workbook));
+                if (route.getTravelTime() > 0) {
+                    countDays.setCellValue(route.getTravelTime());
+                    countDays.setCellStyle(cellStyleField(workbook));
+                }
 
                 Cell countDaysLoadUnload = row.createCell(8);
                 countDaysLoadUnload.setCellValue(route.getLoadUnload());
@@ -203,11 +209,12 @@ public class DownloadFileExcelService {
                 sheet.autoSizeColumn(10);
 
                 Cell rate = row.createCell(11);
+                if (route.getRate() > 0)
                     rate.setCellValue(route.getRate());
-                    if (route.isRequestRout())
-                        rate.setCellStyle(cellStyleFieldNeedCalc(workbook));
-                    else
-                        rate.setCellStyle(cellStyleFieldFormat(workbook));
+                if (route.isRequestRout())
+                    rate.setCellStyle(cellStyleFieldNeedCalc(workbook));
+                else
+                    rate.setCellStyle(cellStyleFieldFormat(workbook));
 
 
                 Cell tariff = row.createCell(12);
@@ -302,6 +309,18 @@ public class DownloadFileExcelService {
             rowStartHead = lastNumberCell + 1;
             numberTable++;
         }
+        workbook.write(byteArrayOutputStream);
+        workbook.close();
+        byteArrayOutputStream.flush();
+        byteArrayOutputStream.close();
+        return new ByteArrayResource(byteArrayOutputStream.toByteArray());
+    }
+
+    public ByteArrayResource downloadTemplateGroupFileExcel() throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        InputStream inputStream = DownloadFileExcelService.class.getResourceAsStream("/" + "template_group.xlsx");
+        BufferedInputStream fis = new BufferedInputStream(inputStream);
+        XSSFWorkbook workbook = new XSSFWorkbook(fis);
         workbook.write(byteArrayOutputStream);
         workbook.close();
         byteArrayOutputStream.flush();

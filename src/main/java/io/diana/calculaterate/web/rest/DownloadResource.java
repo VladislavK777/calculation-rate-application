@@ -32,6 +32,11 @@ public class DownloadResource {
         return new ResponseEntity<>(downloadFileExcelService.downloadFileExcel(exportModelDTOList), getHeaders(), HttpStatus.CREATED);
     }
 
+    @PostMapping("/template-group-file")
+    public ResponseEntity<ByteArrayResource> downloadTemplateFileGroupRouts() throws IOException {
+        return new ResponseEntity<>(downloadFileExcelService.downloadTemplateGroupFileExcel(), getHeaders(), HttpStatus.CREATED);
+    }
+
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(parse("attachment; filename=routs_" + LocalDateTime.now() + ".xlsx"));

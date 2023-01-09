@@ -198,7 +198,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getTravelTime() {
-        return round(travelTime, 2);
+        return Objects.nonNull(travelTime) ? round(travelTime, 2) : null;
     }
 
     public void setTravelTime(Double travelTime) {
@@ -206,7 +206,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getLoadUnload() {
-        return round(loadUnload, 2);
+        return Objects.nonNull(loadUnload) ? round(loadUnload, 2) : null;
     }
 
     public void setLoadUnload(Double loadUnload) {
@@ -222,7 +222,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getRate() {
-        return round(rate, 2);
+        return Objects.nonNull(rate) ? round(rate, 2) : null;
     }
 
     public void setRate(Double rate) {
@@ -230,7 +230,7 @@ public class ReturnExceptionSetting {
     }
 
     public Double getTariff() {
-        return round(tariff, 2);
+        return Objects.nonNull(tariff) ? round(tariff, 2) : null;
     }
 
     public void setTariff(Double tariff) {

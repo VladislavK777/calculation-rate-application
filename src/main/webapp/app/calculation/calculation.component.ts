@@ -122,10 +122,17 @@ export class CalculationComponent implements OnInit {
   }
 
   downloadFile() {
-    this.calculationService.downloadsExcel(this.totalRouts).subscribe(response => {
+    this.calculationService.downloadExcel(this.totalRouts).subscribe(response => {
       let blob = new Blob([response], {type: "application/vnd.ms-excel"});
       const currentDate = this.datePipe.transform(new Date(), 'dd.MM.yyyy HH.mm');
       saveAs(blob, 'routs_' + currentDate + '.xlsx');
+    });
+  }
+
+  downloadsTemplateGroupFileExcel() {
+    this.calculationService.downloadTemplateGroupFileExcel().subscribe(response => {
+      let blob = new Blob([response], {type: "application/vnd.ms-excel"});
+      saveAs(blob, 'Шаблон для группового расчета.xlsx');
     });
   }
 

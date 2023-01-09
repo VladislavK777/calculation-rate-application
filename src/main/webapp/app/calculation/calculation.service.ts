@@ -22,7 +22,11 @@ export class CalculationService {
     return this.http.post<ExportModel[]>(`${this.resourceUrl}/group`, formData);
   }
 
-  downloadsExcel(body: ExportModel[]): Observable<Blob> {
+  downloadExcel(body: ExportModel[]): Observable<Blob> {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/download'), body, {responseType: 'blob'});
+  }
+
+  downloadTemplateGroupFileExcel(): Observable<Blob> {
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/download/template-group-file'), null, {responseType: 'blob'});
   }
 }

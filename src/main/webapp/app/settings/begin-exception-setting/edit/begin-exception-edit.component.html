@@ -115,17 +115,7 @@
           </mat-autocomplete>
         </mat-form-field>
       </div>
-      <div class="mb-3" *ngIf="editForm.value.id">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Тип рейса</mat-label>
-          <input type="text"
-                 matInput
-                 formControlName="cargoFlightType"
-                 [readonly]="true"
-                 autocomplete="off">
-        </mat-form-field>
-      </div>
-      <div class="mb-3" *ngIf="!editForm.value.id">
+      <div class="mb-3">
         <mat-form-field class="example-full-width" appearance="fill">
           <mat-label>Тип рейса</mat-label>
           <mat-select formControlName="cargoFlightType">
