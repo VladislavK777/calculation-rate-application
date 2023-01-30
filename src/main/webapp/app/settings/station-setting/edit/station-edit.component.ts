@@ -30,8 +30,8 @@ export class StationEditComponent implements OnInit {
     id: new FormControl(stationTemplate.id, {nonNullable: true}),
     code: new FormControl(stationTemplate.code, {nonNullable: true}),
     name: new FormControl(stationTemplate.name, {nonNullable: true}),
-    road: new FormControl(stationTemplate.road?.name, {nonNullable: true}),
-    department: new FormControl(stationTemplate.department?.name, {nonNullable: true}),
+    road: new FormControl(),
+    department: new FormControl(),
   });
 
   constructor(private stationService: StationService,
@@ -44,6 +44,8 @@ export class StationEditComponent implements OnInit {
     this.route.data.subscribe(({ station }) => {
       if (station) {
         this.editForm.reset({id: station.id, code: station.code, name: station.name, road: station.road.name, department: station.department?.name});
+        this.road = station.road;
+        this.department = station.department;
         this.station = station;
         this.departments = this.departmentService.findAllByRoadId(station.road.id);
       } else {

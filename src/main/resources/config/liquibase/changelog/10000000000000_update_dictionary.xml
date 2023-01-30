@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="jhipster" id="10000000000000">
+        <loadUpdateData
+            primaryKey="id"
+            file="config/liquibase/data/update/station_update.csv"
+            separator=";"
+            tableName="station"/>
+    </changeSet>
+
+    <changeSet author="jhipster" id="10000000000001">
+        <loadUpdateData
+            primaryKey="id"
+            file="config/liquibase/data/update/cargo_update.csv"
+            separator=";"
+            tableName="cargo"/>
+    </changeSet>
+</databaseChangeLog>
